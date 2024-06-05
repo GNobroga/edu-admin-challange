@@ -4,3 +4,5 @@ export interface User {
   email: string;
   type: 'STUDENT' |'TEACHER';
 }
+
+

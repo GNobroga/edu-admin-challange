@@ -2,9 +2,8 @@ import { Class } from "./class";
 import { User } from "./user";
 
 export interface Subject {
+  id: number;
   name: string;
-  classId: number;
-  class?: Class;
-  teacher?: User;
-  teacherId: number;
+  class: Class;
+  teacher: Omit<User, 'type'>;
 }

@@ -18,3 +18,9 @@ tbody > tr:nth-child(2n + 1) {
 }
 
 
+@layer app-components {
+
+  .fab-button {
+    @apply rounded-full flex items-center justify-center w-10 h-10 hover:bg-opacity-80;
+  }
+}

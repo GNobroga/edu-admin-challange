@@ -44,4 +44,8 @@ public class ClassRepository(AppDbContext context) : IClassRepository
         return false;
     }
 
+    public IEnumerable<ClassEntity> Search(string term)
+    {
+        return context.Classes.Where(obj => obj.Name.Contains(term));
+    }
 }

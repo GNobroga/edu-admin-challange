@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-0 left-0 bg-black bg-opacity-10 flex items-center justify-center w-screen h-screen">
+  <div class="fixed top-0 left-0 bg-black bg-opacity-40 flex items-center justify-center w-screen h-screen">
     <div class="bg-white max-w-[30vw] w-full p-5 animate-slide-in rounded-md">
       <h1 class="text-lg font-medium">Aviso</h1>
       <p class="mt-3">Tem certeza que deseja prosseguir?</p>

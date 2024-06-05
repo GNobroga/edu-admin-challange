@@ -42,7 +42,7 @@ public class UserService(IUserRepository repository, IMapper mapper) : IUserServ
     public bool Update(int id, UserRequestDTO source)
     {
        var user = ThrowIfUserNotFoundOrGet(id);
-
+        Console.WriteLine("user.Email != source.Email" + user.Email != source.Email);
        if (repository.ExistsByEmail(source.Email!) && user.Email != source.Email)
             throw new ApplicationException("O email já está sendo utilizado.");
 

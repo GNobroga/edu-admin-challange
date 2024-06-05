@@ -7,8 +7,8 @@
         <span class="bg-gradient-to-r from-blue-500 to-teal-400 flex justify-between p-3">
             <h2 class="p-3 rounded-md bg-brand-secondary text-white font-semibold text-xl">Gerenciar Alunos</h2>
             <section class="flex gap-3 items-center">
-                <button @click="$router.push('/students/update')" id="modalBtnClient" class="bg-green-600 hover:bg-green-400 text-white shadow flex gap-2 items-center hover:opacity-90  px-3 rounded-sm text-sm py-2 font-semibold">
-                    Adicionar novo
+                <button @click="$router.push('/students/new')" id="modalBtnClient" class="fab-button bg-blue-800 text-white">
+                  <i class="bi bi-person-plus-fill text-2xl"></i>
                 </button>
             </section>
         </span>
@@ -38,7 +38,7 @@
                 <td>{{  student.email }}</td>
                 <td>
                   <div class="flex gap-3 items-center py-3">
-                    <button @click="$router.push('/students/update?studentId='+student.id)" class="w-8 h-8 rounded-full hover:opacity-80 bg-orange-500 text-white"><i class="bi bi-pencil-fill"></i></button>
+                    <button @click="$router.push(`/students/${student.id}/update`)" class="w-8 h-8 rounded-full hover:opacity-80 bg-orange-500 text-white"><i class="bi bi-pencil-fill"></i></button>
                     <button @click="showConfirmDelation = true" class="w-8 h-8 rounded-full hover:opacity-80 bg-red-500 text-white"> <i class="bi bi-trash3-fill"></i></button>
                   </div>
                 </td>
@@ -64,6 +64,7 @@
 import { PageModel } from '~/components/Paginator.vue';
 import { ApiConfig } from '~/environments/api-config';
 import { User } from '~/models/user';
+import { apiRequest } from '~/utils/api-request';
 
 
   export default {
@@ -86,7 +87,9 @@ import { User } from '~/models/user';
         this.data = (await req.json()).data.filter((user: User) => user.type === 'STUDENT');
       },
       async deleteById(id: number) {
-        await fetch(ApiConfig.baseUrlWith('users/'+id), { method: 'delete' });
+        await apiRequest(ApiConfig.baseUrlWith('users/'+id), null, undefined, undefined, {
+          method: 'delete',
+        });
         await this.fetchData();
       },
       async search(data: { value: string }) {

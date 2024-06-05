@@ -10,6 +10,10 @@
         <div>
           <Nuxt/>
         </div>
+
+        <footer class="bg-gradient-to-l flex justify-center text-white from-blue-500 to-teal-400 py-5 absolute bottom-0 left-0 w-full">
+          <p class=text-medium>Feito com amor por Gabriel Cardoso ✌️</p>
+        </footer>
   </div>
 </template>
 

@@ -9,6 +9,10 @@ namespace EduAdmin.Feature.Class.Service;
 
 public class ClassService(IClassRepository repository, IMapper mapper) : IClassService
 {
+    public IEnumerable<ClassResponseDTO> Search(string term)
+    {
+        return mapper.Map<List<ClassResponseDTO>>(repository.Search(term));
+    }
     public ClassResponseDTO Create(ClassRequestDTO record)
     {
         return mapper.Map<ClassResponseDTO>(repository.Create(mapper.Map<ClassEntity>(record)));

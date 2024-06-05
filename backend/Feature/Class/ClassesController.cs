@@ -14,7 +14,13 @@ namespace HubEscolar.Feature.Class;
 public class ClassesController(IClassService service) : ControllerBase
 {
 
-      [HttpGet]
+    [HttpGet("search")]
+    public ActionResult<BaseResponse<List<ClassResponseDTO>>> Get([FromQuery] string term)
+    {
+        return Ok(BaseResponse<List<ClassResponseDTO>>.WithSuccess(service.Search(term)));
+    }
+
+    [HttpGet]
     public ActionResult<BaseResponse<List<ClassResponseDTO>>> Get([FromQuery] PageRequest pageRequest)
     {
         return Ok(BaseResponse<List<ClassResponseDTO>>.WithSuccess(service.FindAll(pageRequest)));
