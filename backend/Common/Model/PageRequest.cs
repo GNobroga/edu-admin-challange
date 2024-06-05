@@ -4,7 +4,7 @@ namespace EduAdmin.Common.Model;
 public class PageRequest 
 {
 
-    private const int MAX_SIZE = 100;
+    private const int MAX_SIZE = Int32.MaxValue;
 
     private int _page = 0;
 
@@ -16,7 +16,7 @@ public class PageRequest
         } 
     }
 
-    private int _size = 10;
+    private int _size = MAX_SIZE;
   
     public int Size 
     { 

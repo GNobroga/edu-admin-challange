@@ -24,6 +24,7 @@ public class SubjectRepository(AppDbContext context) : ISubjectRepository
          return context.Subjects
             .Include(obj => obj.Class)
             .Include(obj => obj.Teacher)
+            .OrderBy(obj => obj.Id)
             .Skip((pageRequest.Page - 1) * pageRequest.Size)
             .Take(pageRequest.Size)
             .ToList();

@@ -1,5 +1,5 @@
 <template>
-      <menu class="bg-black bg-opacity-50 absolute z-[999] top-0 left-0 w-full h-full flex items-center justify-center">
+      <menu class="menu">
       <form @submit.prevent="validateForm" class="bg-white px-7 py-10 max-w-[45vw] w-full shadow-lg rounded-md flex flex-col gap-3">
         <div class="flex justify-between">
           <h1 class="font-bold text-2xl mb-2">Novo</h1>
@@ -17,13 +17,15 @@
 
         <div class="flex flex-col gap-2 flex-1">
             <label class="opacity-80">Sala</label>
-            <AutoComplete @getId="setClassId" name="classes"/>
+            <SelectOption @id="setClassId" :options="classOptions"/>
+            <span v-if="errors.classId" class="text-xs text-red-600 ms-2">{{ errors.classId  }}</span>
         </div>
 
 
        <div class="flex flex-col gap-2 flex-1">
             <label class="opacity-80">Professor</label>
-            <AutoComplete @getId="setTeacherId" name="users" :excludeProperties="['type']" :criteria="obj => obj.type === 'TEACHER'"/>
+            <SelectOption @id="setTeacherId" :excludeProperties="['type']" :options="teacherOptions"/>
+            <span v-if="errors.teacherId" class="text-xs text-red-600 ms-2">{{ errors.teacherId  }}</span>
         </div>
 
         <span class="flex justify-between mt-5 gap-3">
@@ -36,6 +38,8 @@
 
 <script lang="ts">
 import { ApiConfig } from '~/environments/api-config';
+import { Class } from '~/models/class';
+import { User } from '~/models/user';
 import { apiRequest } from '~/utils/api-request';
 
 
@@ -48,8 +52,16 @@ import { apiRequest } from '~/utils/api-request';
       },
       errors: {
         name: '',
-      }
+        teacherId: '',
+        classId: '',
+      },
+      classOptions: [] as Class[],
+      teacherOptions: [] as User[],
     }),
+    async created() {
+      await apiRequest(ApiConfig.baseUrlWith('users'), undefined, data => this.teacherOptions = data as any);
+      apiRequest(ApiConfig.baseUrlWith('classes'), undefined, data => this.classOptions = data as any);
+    },
     methods: {
       setClassId(obj: { id: number | null}) {
         this.model.classId = obj.id as number;
@@ -58,10 +70,18 @@ import { apiRequest } from '~/utils/api-request';
         this.model.teacherId = obj.id;
       },
       async validateForm() {
-        this.errors = { name: '' };
+        this.errors = { } as any;
 
         if (this.model.name.trim() === '') {
           this.errors.name = 'O campo é obrigatório';
+        }
+
+        if (this.model.classId === null) {
+          this.errors.classId = "O campo é obrigatório";
+        }
+
+        if (this.model.teacherId === null) {
+          this.errors.teacherId = "O campo é obrigatório";
         }
 
 

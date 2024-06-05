@@ -1,5 +1,5 @@
 <template>
-  <menu class="bg-black bg-opacity-30 absolute top-0 left-0  z-[999] w-full h-full flex items-center justify-center">
+  <menu class="menu">
   <form @submit.prevent="validateForm" class="bg-white px-7 py-10 max-w-[40vw] w-full shadow-lg rounded-md flex flex-col gap-3">
     <div class="flex justify-between">
       <h1 class="font-bold text-2xl mb-2">Atualizar</h1>

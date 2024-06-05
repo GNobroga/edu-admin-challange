@@ -24,6 +24,7 @@ public class AttendanceRepository(AppDbContext context) : IAttendanceRepository 
          return context.Attendances
             .Include(obj => obj.Student)
             .Include(obj => obj.Subject)
+            .OrderBy(obj => obj.Id)
             .Skip((pageRequest.Page - 1) * pageRequest.Size)
             .Take(pageRequest.Size)
             .ToList();

@@ -22,7 +22,7 @@ public class UserRepository(AppDbContext context) : IUserRepository  {
 
     public IEnumerable<UserEntity> FindAll(PageRequest pageRequest) 
     {
-         return context.Users.Skip((pageRequest.Page - 1) * pageRequest.Size).Take(pageRequest.Size).OrderBy(obj => obj.Id).ToList();
+         return context.Users.OrderBy(obj => obj.Id).Skip((pageRequest.Page - 1) * pageRequest.Size).Take(pageRequest.Size).ToList();
     }
 
     public UserEntity FindById(int id) => context.Users.FirstOrDefault(entity => entity.Id == id)!;
@@ -50,6 +50,7 @@ public class UserRepository(AppDbContext context) : IUserRepository  {
         term = term.ToLower();
         return context.Users
             .Where(user => user.Name.ToLower().Contains(term) || user.Email.ToLower().Contains(term))
+            .OrderBy(obj => obj.Id)
             .ToList();
     }
 

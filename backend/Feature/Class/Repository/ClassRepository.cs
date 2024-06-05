@@ -19,8 +19,10 @@ public class ClassRepository(AppDbContext context) : IClassRepository
     }
 
     public IEnumerable<ClassEntity> FindAll(PageRequest pageRequest) 
-    {
+    {   
+        Console.WriteLine(pageRequest.Size);
          return context.Classes
+            .OrderBy(obj => obj.Id)
             .Skip((pageRequest.Page - 1) * pageRequest.Size)
             .Take(pageRequest.Size)
             .ToList();
