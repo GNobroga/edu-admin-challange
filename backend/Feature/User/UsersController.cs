@@ -1,65 +1,47 @@
-using AutoMapper;
-using EduAdmin.Common;
-using EduAdmin.Features.User;
+
+using EduAdmin.Common.Model;
+using EduAdmin.Feature.User.DTO;
+using EduAdmin.Feature.User.Service;
 using Microsoft.AspNetCore.Mvc;
+namespace EduAdmin.Feature.User;
 
-namespace HubEscolar.Feature.User;
-
+[Route("[controller]")]
 [ApiController]
-[Route("usuarios")]
-public class UsersController(UserRepository repository, IMapper mapper) : ControllerBase
+public class UsersController(IUserService service) : ControllerBase
 {
-
-    [HttpGet]
-    public ActionResult<BaseResponse<IEnumerable<UserEntity>>> Get([FromQuery] PageRequest pageRequest) => Ok(BaseResponse<IEnumerable<UserEntity>>.WithSuccess(repository.FindAll(pageRequest)));
-
-    [HttpGet("{id:int}")]
-    public ActionResult<UserEntity> Get(int id)
+    [HttpGet("search")]
+    public ActionResult<BaseResponse<List<UserResponseDTO>>> Get([FromQuery] string term)
     {
-        if (!repository.ExistsById(id)) 
-        {
-            return BadRequest(ResponseError.With($"Usuário com ID {id} não existe"));
-        }
-
-        return Ok(BaseResponse<UserEntity>.WithSuccess(repository.FindById(id)));
+        return Ok(BaseResponse<List<UserResponseDTO>>.WithSuccess(service.Search(term)));
     }
 
-    [HttpPut("{id:int}")]
-    public ActionResult<BaseResponse<bool>> Put(int id, UserRequestDTO source)
+    [HttpGet]
+    public ActionResult<BaseResponse<List<UserResponseDTO>>> Get([FromQuery] PageRequest pageRequest)
     {
-         if (!repository.ExistsById(id)) 
-        {
-            return BadRequest(ResponseError.With($"Usuário com ID {id} não existe"));
-        }
+        return Ok(BaseResponse<List<UserResponseDTO>>.WithSuccess(service.FindAll(pageRequest)));
+    }
 
-        var user = repository.FindById(id)!;
-
-        if (repository.ExistsByEmail(source.Email) && !user.Email.Equals(source.Email, StringComparison.OrdinalIgnoreCase))
-        {
-            return BadRequest(ResponseError.With("Email já em uso"));
-        }
-
-        return Ok(
-            BaseResponse<UserEntity>.WithSuccess(repository.Update(mapper.Map(source, user))
-        ));
+    [HttpGet("{id:int}")]
+    public ActionResult<BaseResponse<UserResponseDTO>> Get(int id)
+    {
+        return Ok(BaseResponse<UserResponseDTO>.WithSuccess(service.FindById(id)));
     }
 
     [HttpPost]
-    public ActionResult<BaseResponse<UserEntity>> Post(UserRequestDTO record) {
-        if (repository.ExistsByEmail(record.Email))
-        {
-            return BadRequest(ResponseError.With("Email já em uso"));
-        }
+    public ActionResult<BaseResponse<bool>> Post(UserRequestDTO request)
+    {
+        return Ok(BaseResponse<bool>.WithSuccess(service.Create(request)));
+    }
 
-        return Ok(
-            BaseResponse<UserEntity>.WithSuccess(repository.Create(mapper.Map<UserEntity>(record)))
-        );
+    [HttpPut("{id:int}")]
+    public ActionResult<BaseResponse<bool>> Put(int id, UserRequestDTO request)
+    {
+        return Ok(BaseResponse<bool>.WithSuccess(service.Update(id, request)));
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult<BaseResponse<bool>> Delete(int id) 
+    public ActionResult<BaseResponse<bool>> Delete(int id)
     {
-        return Ok(BaseResponse<bool>.WithSuccess(repository.DeleteById(id)));
+        return Ok(BaseResponse<bool>.WithSuccess(service.DeleteById(id)));
     }
-
 }

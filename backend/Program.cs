@@ -1,4 +1,6 @@
-using EduAdmin.Extension.IoC;
+
+
+using EduAdmin.Extension;
 
 var builder = WebApplication.CreateBuilder(args);
 

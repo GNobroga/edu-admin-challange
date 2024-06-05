@@ -1,4 +1,4 @@
-using EduAdmin.Common;
+using EduAdmin.Common.Base;
 using EduAdmin.Features.Class;
 using EduAdmin.Features.User;
 

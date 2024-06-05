@@ -7,13 +7,13 @@
         <span class="bg-gradient-to-r from-blue-500 to-teal-400 flex justify-between p-3">
             <h2 class="p-3 rounded-md bg-brand-secondary text-white font-semibold text-xl">Gerenciar Alunos</h2>
             <section class="flex gap-3 items-center">
-                <button @click="$router.push('/students/update')" id="modalBtnClient" class="bg-green-500 text-white shadow border border-black border-opacity-20 flex gap-2 items-center hover:opacity-90  px-3 rounded-sm text-sm py-2 font-semibold">
+                <button @click="$router.push('/students/update')" id="modalBtnClient" class="bg-green-600 hover:bg-green-400 text-white shadow flex gap-2 items-center hover:opacity-90  px-3 rounded-sm text-sm py-2 font-semibold">
                     Adicionar novo
                 </button>
             </section>
         </span>
-
-       <div class="max-h-[60vh] overflow-hidden overflow-y-auto">
+        <SearchInput @search="search"/>
+       <div class="max-h-[50vh] overflow-hidden overflow-y-auto">
         <table class="w-full bg-white">
             <thead class="text-sm">
                <tr class="p-2">
@@ -39,10 +39,10 @@
                 <td>
                   <div class="flex gap-3 items-center py-3">
                     <button @click="$router.push('/students/update?studentId='+student.id)" class="w-8 h-8 rounded-full hover:opacity-80 bg-orange-500 text-white"><i class="bi bi-pencil-fill"></i></button>
-                    <button @click="showDeleteAlert = true" class="w-8 h-8 rounded-full hover:opacity-80 bg-red-500 text-white"> <i class="bi bi-trash3-fill"></i></button>
+                    <button @click="showConfirmDelation = true" class="w-8 h-8 rounded-full hover:opacity-80 bg-red-500 text-white"> <i class="bi bi-trash3-fill"></i></button>
                   </div>
                 </td>
-                <DeleteAlert v-if="showDeleteAlert" @close="showDeleteAlert = false" @confirm="deleteById(student.id)"/>
+                <ConfirmDeletion v-if="showConfirmDelation" @close="showConfirmDelation = false" @confirm="deleteById(student.id)"/>
               </tr>
               <tr v-if="!data.length">
                 <td colspan="4">
@@ -71,7 +71,7 @@ import { User } from '~/models/user';
     data() {
       return {
         data: [] as User[],
-        showDeleteAlert: false,
+        showConfirmDelation: false,
       }
     },
     created() {
@@ -82,14 +82,24 @@ import { User } from '~/models/user';
         this.fetchData(pageModel);
       },
       async fetchData(pageModel?: PageModel) {
-        const req = await fetch(ApiConfig.baseUrlWith(`usuarios?page=${pageModel?.currentPage ?? 0}&size=${pageModel?.currentSize ?? 10}`));
-        this.data = (await req.json()).data;
+        const req = await fetch(ApiConfig.baseUrlWith(`users?page=${pageModel?.currentPage ?? 0}&size=${pageModel?.currentSize ?? 10}`));
+        this.data = (await req.json()).data.filter((user: User) => user.type === 'STUDENT');
       },
       async deleteById(id: number) {
-        await fetch(ApiConfig.baseUrlWith('usuarios/'+id), { method: 'delete' });
+        await fetch(ApiConfig.baseUrlWith('users/'+id), { method: 'delete' });
         await this.fetchData();
+      },
+      async search(data: { value: string }) {
+        if (data.value.trim() === '') {
+          await this.fetchData();
+          return;
+        }
+
+        const req = await fetch(ApiConfig.baseUrlWith(`users/search?term=${data.value}`));
+        this.data = (await req.json()).data.filter((user: User) => user.type === 'STUDENT');
       }
-    }
+    },
+
   };
 
 </script>

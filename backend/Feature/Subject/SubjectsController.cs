@@ -1,107 +1,56 @@
-using System.Linq.Expressions;
-using AutoMapper;
-using EduAdmin.Common;
-using EduAdmin.Feature.Class;
-using EduAdmin.Feature.Subject;
-using EduAdmin.Features.Subject;
-using EduAdmin.Features.User;
-using HubEscolar.Feature.User;
+using EduAdmin.Common.Model;
+using EduAdmin.Feature.Subject.DTO;
+using EduAdmin.Feature.Subject.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HubEscolar.Feature.Subject;
 
 [ApiController]
-[Route("disciplinas")]
-public class SubjectsController(SubjectRepository repository, ClassRepository classRepository, UserRepository userRepository,  IMapper mapper) : ControllerBase
+[Route("[controller]")]
+public class SubjectsController(ISubjectService service) : ControllerBase
 {
 
-    [HttpGet]
-    public ActionResult<BaseResponse<IEnumerable<SubjectEntity>>> Get([FromQuery] PageRequest pageRequest)
+    [HttpGet("teacher/{id:int}")]
+    public ActionResult<BaseResponse<IEnumerable<SubjectResponseDTO>>> GetByTeacherId(int id)
     {
-        List<Expression<Func<SubjectEntity, object>>> includes = [
-            (entity) => entity.Class!,
-            (entity) => entity.Teacher!,
-        ];
-      return  Ok(BaseResponse<IEnumerable<SubjectEntity>>.WithSuccess(repository.FindAll(pageRequest)));
+        return Ok(BaseResponse<IEnumerable<SubjectResponseDTO>>.WithSuccess(service.FindByTeacherId(id)));
+    }
+
+
+    [HttpGet("search")]
+    public ActionResult<BaseResponse<List<SubjectResponseDTO>>> Get([FromQuery] string term)
+    {
+        return Ok(BaseResponse<List<SubjectResponseDTO>>.WithSuccess(service.Search(term)));
+    }
+
+    [HttpGet]
+    public ActionResult<BaseResponse<List<SubjectResponseDTO>>> Get([FromQuery] PageRequest pageRequest)
+    {
+        return Ok(BaseResponse<List<SubjectResponseDTO>>.WithSuccess(service.FindAll(pageRequest)));
     }
 
     [HttpGet("{id:int}")]
-    public ActionResult<SubjectEntity> Get(int id)
+    public ActionResult<BaseResponse<SubjectResponseDTO>> Get(int id)
     {
-        if (!repository.ExistsById(id)) 
-        {
-            return BadRequest(ResponseError.With($"Disciplina com ID {id} não existe"));
-        }
-
-        return Ok(BaseResponse<SubjectEntity>.WithSuccess(repository.FindById(id)));
-    }
-
-    [HttpPut("{id:int}")]
-    public ActionResult<BaseResponse<bool>> Put(int id, SubjectRequestDTO source)
-    {
-        if (!repository.ExistsById(id)) 
-        {
-            return BadRequest(ResponseError.With($"Disciplina com ID {id} não existe"));
-        }
-
-        if (!userRepository.ExistsById(source.TeacherId!.Value))
-        {
-             return BadRequest(ResponseError.With($"Professor com ID {source.TeacherId} não existe"));
-        }
-
-        var student = userRepository.FindById(source.TeacherId.Value);
-
-        if (student!.Type != UserEntity.UserType.TEACHER)
-        {
-            return BadRequest(ResponseError.With($"Não é possível cadastrar um aluno como professor"));
-        }
-
-        var Subject = repository.FindById(id)!;
-
-        if (Subject.TeacherId != source.TeacherId)
-        {
-            return BadRequest(ResponseError.With("Não é possível alterar o professor"));
-        }
-
-        if (!classRepository.ExistsById(source.ClassId!.Value))
-        {
-             return BadRequest(ResponseError.With($"Disciplina com ID {source.ClassId!.Value} não existe"));
-        }
-
-
-        return Ok(
-            BaseResponse<SubjectEntity>.WithSuccess(repository.Update(mapper.Map(source, repository.FindById(id)!))
-        ));
+        return Ok(BaseResponse<SubjectResponseDTO>.WithSuccess(service.FindById(id)));
     }
 
     [HttpPost]
-    public ActionResult<BaseResponse<SubjectEntity>> Post(SubjectRequestDTO record) {
+    public ActionResult<BaseResponse<bool>> Post(SubjectRequestDTO request)
+    {
+        return Ok(BaseResponse<bool>.WithSuccess(service.Create(request)));
+    }
 
-        if (!userRepository.ExistsById(record.TeacherId!.Value))
-        {
-             return BadRequest(ResponseError.With($"Estudante com ID {record.TeacherId} não existe"));
-        }
+    [HttpPut("{id:int}")]
+    public ActionResult<BaseResponse<bool>> Put(int id, SubjectRequestDTO request)
+    {
+        return Ok(BaseResponse<bool>.WithSuccess(service.Update(id, request)));
+    }
 
-        if (!userRepository.ExistsById(record.TeacherId!.Value))
-        {
-             return BadRequest(ResponseError.With($"Professor com ID {record.TeacherId} não existe"));
-        }
-
-        var student = userRepository.FindById(record.TeacherId.Value);
-
-        if (student!.Type != UserEntity.UserType.TEACHER)
-        {
-            return BadRequest(ResponseError.With($"Não é possível cadastrar um aluno como professor"));
-        }
-
-        if (!classRepository.ExistsById(record.ClassId!.Value))
-        {
-             return BadRequest(ResponseError.With($"Disciplina com ID {record.ClassId!.Value} não existe"));
-        }
-
-        return Ok(
-            BaseResponse<SubjectEntity>.WithSuccess(repository.Create(mapper.Map<SubjectEntity>(record)))
-        );
+    [HttpDelete("{id:int}")]
+    public ActionResult<BaseResponse<bool>> Delete(int id)
+    {
+        return Ok(BaseResponse<bool>.WithSuccess(service.DeleteById(id)));
     }
 
 }
