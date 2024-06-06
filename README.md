@@ -1,4 +1,4 @@
-# Edu Project
+# EduAdmin 
 
 Um simples projeto feito para o desafio da **ZDZCode**, feito com amor por Gabriel Cardoso <3
 
