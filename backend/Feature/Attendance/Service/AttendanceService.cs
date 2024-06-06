@@ -33,6 +33,8 @@ public class AttendanceService(IAttendanceRepository repository, IUserRepository
         return mapper.Map<AttendanceResponseDTO>(repository.FindById(id));
     }
 
+    public IEnumerable<AttendanceResponseDTO> Search(string term) => mapper.Map<List<AttendanceResponseDTO>>(repository.Search(term));
+    
     public bool Update(int id, AttendanceRequestDTO source)
     {
         var entity = repository.FindById(id) ?? throw new ApplicationException("Chamada não encontrada");

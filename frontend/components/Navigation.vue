@@ -1,5 +1,10 @@
 <template>
-  <nav class="flex absolute left-0 mt-5 ms-4 flex-col gap-5">
+  <div>
+    <button @click="close = !close" class="fab-button bg-[#880364] mr-2 text-white transition-all">
+      <i v-if="close" class="bi bi-list text-2xl"></i>
+      <i v-if="!close" class="bi bi-x-lg text-2xl"></i>
+    </button>
+    <nav v-if="!close" class="flex flex-col gap-4 absolute right-2 top-20 fadeIn">
            <a @click="$router.push('/students')"  class="flex cursor-pointer items-center bg-[#880364] text-white relative rounded-xl"  >
                 <span class="bg-[#B481A3]  flex items-center justify-center rounded-full absolute -left-2 w-8 h-8 transition-all opacity-0" v-bind:class="{ 'opacity-100': currentPath.includes('students')}">
                   <i class="bi bi-arrow-right"></i>
@@ -49,13 +54,15 @@
                 </span>
             </a>
         </nav>
+  </div>
 </template>
 
 <script lang="ts">
   export default {
     data() {
       return {
-        currentPath: ''
+        currentPath: '',
+        close: false,
       }
     },
     created() {

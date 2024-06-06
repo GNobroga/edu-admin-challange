@@ -17,6 +17,31 @@ tbody > tr:nth-child(2n + 1) {
   animation: slideIn 0.5s ease-in-out;
 }
 
+@keyframes fadeInTranslate {
+  from {
+    transform: translateX(-20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.translateX {
+  animation: fadeInTranslate 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+   opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
 
 @layer app-components {
 
@@ -35,4 +60,19 @@ tbody > tr:nth-child(2n + 1) {
   .raised-button {
     @apply w-full uppercase font-medium !h-14 hover:opacity-80 rounded-md;
   }
+}
+
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  z-index: 999;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

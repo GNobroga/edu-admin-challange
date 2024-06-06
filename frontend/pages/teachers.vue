@@ -3,7 +3,7 @@
 
 
     <!-- <nuxt-link to="/sobre">Ir para a página Sobre</nuxt-link> -->
-    <div class="fadeIn w-full mx-auto mt-8 max-w-[70vw] shadow-xl bg-white border border-black border-opacity-70">
+    <div class="translateX w-full mx-auto mt-8  max-w-[70vw] shadow-xl bg-white border border-black border-opacity-70">
         <span class="bg-gradient-to-r from-blue-500 to-teal-400 flex justify-between p-3">
             <h2 class="p-3 rounded-md bg-brand-secondary text-white font-semibold text-xl">Gerenciar Professores</h2>
             <section class="flex gap-3 items-center">
@@ -13,7 +13,7 @@
             </section>
         </span>
         <SearchInput @search="search"/>
-       <div class="max-h-[50vh] overflow-hidden overflow-y-auto">
+       <div class="max-h-[40vh] overflow-hidden overflow-y-auto">
         <table class="w-full bg-white">
             <thead class="text-base">
                <tr class="p-2">

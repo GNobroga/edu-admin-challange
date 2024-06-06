@@ -39,4 +39,10 @@ public class AttendancesController(IAttendanceService service) : ControllerBase
         return Ok(BaseResponse<bool>.WithSuccess(service.DeleteById(id)));
     }
 
+    [HttpGet("search")]
+    public ActionResult<BaseResponse<List<AttendanceResponseDTO>>> Get([FromQuery] string term)
+    {
+        return Ok(BaseResponse<List<AttendanceResponseDTO>>.WithSuccess(service.Search(term)));
+    }
+
 }

@@ -50,4 +50,17 @@ public class AttendanceRepository(AppDbContext context) : IAttendanceRepository 
         return false;
     }
 
+    public IEnumerable<AttendanceEntity> Search(string term)
+    {
+        term = term.Trim().ToLower();
+       return context.Attendances
+            .Include(obj => obj.Student)
+            .Include(obj => obj.Subject)
+            .Where(obj => 
+                obj.Student!.Name.Trim().ToLower().Contains(term) ||
+                obj.Student!.Email.Trim().ToLower().Contains(term) ||
+                obj.Subject!.Name.Trim().ToLower().Contains(term) ||
+                obj.Date.ToString().Contains(term) 
+            ).ToList();
+    }
 }
