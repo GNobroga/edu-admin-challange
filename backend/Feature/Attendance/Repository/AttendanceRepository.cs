@@ -63,4 +63,19 @@ public class AttendanceRepository(AppDbContext context) : IAttendanceRepository 
                 obj.Date.ToString().Contains(term) 
             ).ToList();
     }
+
+    public (int, int) GetCountPresentByStudentId(int id)
+    {
+        var count =  context.Attendances
+            .Include(obj => obj.Student)
+            .Where(obj => obj.StudentId == id && obj.Present)
+            .Count();
+
+        var total =  context.Attendances
+            .Include(obj => obj.Student)
+            .Where(obj => obj.StudentId == id)
+            .Count();
+
+        return (count, total);
+    }
 }

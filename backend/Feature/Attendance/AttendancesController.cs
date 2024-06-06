@@ -9,7 +9,13 @@ namespace HubEscolar.Feature.Attendance;
 [Route("[controller]")]
 public class AttendancesController(IAttendanceService service) : ControllerBase
 {
-     [HttpGet]
+
+    [HttpGet("student/{id:int}/count")]
+    public ActionResult<BaseResponse<AttendancePresentCountDTO>> GetByPresetCount(int id)
+    {
+        return Ok(BaseResponse<AttendancePresentCountDTO>.WithSuccess(service.GetCountPresentByStudentId(id)));
+    }
+    [HttpGet]
     public ActionResult<BaseResponse<List<AttendanceResponseDTO>>> Get([FromQuery] PageRequest pageRequest)
     {
         return Ok(BaseResponse<List<AttendanceResponseDTO>>.WithSuccess(service.FindAll(pageRequest)));

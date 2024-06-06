@@ -27,6 +27,9 @@
                         <span class="py-2 block">Email</span>
                     </th>
                     <th class="font-semibold xl:text-start text-[#5E6B8C]">
+                        <span class="py-2 block">Total de Disciplinas</span>
+                    </th>
+                    <th class="font-semibold xl:text-start text-[#5E6B8C]">
                       <span>Ações</span>
                     </th>
                 </tr>
@@ -36,6 +39,7 @@
                 <td class="p-3"> PF{{  teacher.id }}</td>
                 <td>{{  teacher.name }}</td>
                 <td>{{  teacher.email }}</td>
+                <td>{{  teacher.totalSubjects }}</td>
                 <td>
                   <div class="flex gap-3 items-center py-3">
                     <button @click="$router.push(`/teachers/${teacher.id}/update`)" class="fab-mini-button bg-orange-500 text-white"><i class="bi bi-pencil-fill"></i></button>
@@ -45,7 +49,7 @@
                 <ConfirmDeletion v-if="showConfirmDelation" @close="showConfirmDelation = false" @confirm="deleteById(teacher.id)"/>
               </tr>
               <tr v-if="!data.length">
-                <td colspan="4">
+                <td colspan="5">
                   <p class="text-center py-4">Não há nenhum professor</p>
                 </td>
               </tr>
@@ -71,7 +75,7 @@
     layout: 'default',
     data() {
       return {
-        data: [] as User[],
+        data: [] as (User & { totalSubjects: number } )[],
         showConfirmDelation: false,
       }
     },
@@ -84,7 +88,15 @@
       },
       async fetchData(pageModel?: PageModel) {
         const req = await fetch(ApiConfig.baseUrlWith(`users?page=${pageModel?.currentPage ?? 0}&size=${pageModel?.currentSize ?? 10}`));
-        this.data = (await req.json()).data.filter((user: User) => user.type === 'TEACHER');
+        const dataReq = (await req.json()).data.filter((user: User) => user.type === 'TEACHER');
+
+        for (const user of dataReq) {
+          const req = await fetch(ApiConfig.baseUrlWith(`subjects/teacher/${user.id}`));
+          const data = (await req.json()).data;
+          user.totalSubjects = data.length;
+        }
+
+        this.data = dataReq;
       },
       async deleteById(id: number) {
         await apiRequest(ApiConfig.baseUrlWith('users/'+id), null, undefined, undefined, {
@@ -99,7 +111,13 @@
         }
 
         const req = await fetch(ApiConfig.baseUrlWith(`users/search?term=${data.value}`));
-        this.data = (await req.json()).data.filter((user: User) => user.type === 'TEACHER');
+        const dataReq = (await req.json()).data.filter((user: User) => user.type === 'TEACHER');
+        for (const user of dataReq) {
+          const req = await fetch(ApiConfig.baseUrlWith(`subjects/teacher/${user.id}`));
+          const data = (await req.json()).data;
+          user.totalSubjects = data.length;
+        }
+        this.data = dataReq;
       }
     },
 

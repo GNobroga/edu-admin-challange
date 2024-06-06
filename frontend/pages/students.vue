@@ -3,7 +3,7 @@
 
 
     <!-- <nuxt-link to="/sobre">Ir para a página Sobre</nuxt-link> -->
-    <div class="translateX w-full mx-auto mt-8 max-w-[70vw] shadow-xl bg-white border border-black border-opacity-70">
+    <div class="translateX w-full mx-auto mt-8 max-w-[80vw] shadow-xl bg-white border border-black border-opacity-70">
         <span class="bg-gradient-to-r from-blue-500 to-teal-400 flex justify-between p-3">
             <h2 class="p-3 rounded-md bg-brand-secondary text-white font-semibold text-xl">Gerenciar Alunos</h2>
             <section class="flex gap-3 items-center">
@@ -27,6 +27,12 @@
                         <span class="py-2 block">Email</span>
                     </th>
                     <th class="font-semibold xl:text-start text-[#5E6B8C]">
+                        <span class="py-2 block">Número de Presenças</span>
+                    </th>
+                    <th class="font-semibold xl:text-start text-[#5E6B8C]">
+                        <span class="py-2 block">Total de Chamadas</span>
+                    </th>
+                    <th class="font-semibold xl:text-start text-[#5E6B8C]">
                       <span>Ações</span>
                     </th>
                 </tr>
@@ -35,6 +41,9 @@
               <tr v-for="student in data" :key="student.id" class="text-base text-center xl:text-start border border-black border-opacity-20">
                 <td class="p-3"> AL{{  student.id }}</td>
                 <td>{{  student.name }}</td>
+                <td>{{  student.email }}</td>
+                <td>{{  student.count }}</td>
+                <td>{{  student.total }}</td>
                 <td><span class="p-1 bg-yellow-500 rounded-md text-white">{{  student.email }}</span></td>
                 <td>
                   <div class="flex gap-3 items-center py-3">
@@ -48,7 +57,7 @@
                 <ConfirmDeletion v-if="showConfirmDelation" @close="showConfirmDelation = false" @confirm="deleteById(student.id)"/>
               </tr>
               <tr v-if="!data.length">
-                <td colspan="4">
+                <td colspan="6">
                   <p class="text-center py-4">Não há nenhum aluno</p>
                 </td>
               </tr>
@@ -74,7 +83,7 @@ import { apiRequest } from '~/utils/api-request';
     layout: 'default',
     data() {
       return {
-        data: [] as User[],
+        data: [] as (User & { count: number, total: number })[],
         showConfirmDelation: false,
       }
     },
@@ -87,7 +96,18 @@ import { apiRequest } from '~/utils/api-request';
       },
       async fetchData(pageModel?: PageModel) {
         const req = await fetch(ApiConfig.baseUrlWith(`users?page=${pageModel?.currentPage ?? 0}&size=${pageModel?.currentSize ?? 10}`));
-        this.data = (await req.json()).data.filter((user: User) => user.type === 'STUDENT');
+        const data = (await req.json() as any).data.filter((user: User) => user.type === 'STUDENT');
+        this.data = [];
+
+        for (const user of data) {
+          const req = await fetch(ApiConfig.baseUrlWith(`attendances/student/${user.id}/count`));
+          const attendancePresent = (await req.json()).data;
+          user.count = attendancePresent.count;
+          user.total = attendancePresent.total;
+        }
+
+        this.data = data;
+
       },
       async deleteById(id: number) {
         await apiRequest(ApiConfig.baseUrlWith('users/'+id), null, undefined, undefined, {
@@ -102,7 +122,16 @@ import { apiRequest } from '~/utils/api-request';
         }
 
         const req = await fetch(ApiConfig.baseUrlWith(`users/search?term=${data.value}`));
-        this.data = (await req.json()).data.filter((user: User) => user.type === 'STUDENT');
+        const _data = (await req.json()).data.filter((user: User) => user.type === 'STUDENT');
+        this.data = [];
+        for (const user of _data) {
+          const req = await fetch(ApiConfig.baseUrlWith(`attendances/student/${user.id}/count`));
+          const attendancePresent = (await req.json()).data;
+          user.count = attendancePresent.count;
+          user.total = attendancePresent.total;
+        }
+
+        this.data = _data;
       }
     },
 

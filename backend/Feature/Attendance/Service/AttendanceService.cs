@@ -33,6 +33,16 @@ public class AttendanceService(IAttendanceRepository repository, IUserRepository
         return mapper.Map<AttendanceResponseDTO>(repository.FindById(id));
     }
 
+    public AttendancePresentCountDTO GetCountPresentByStudentId(int id)
+    {
+
+        var (count, total ) = repository.GetCountPresentByStudentId(id);
+        return new AttendancePresentCountDTO {
+            Count = count,
+            Total = total
+        };
+    }
+
     public IEnumerable<AttendanceResponseDTO> Search(string term) => mapper.Map<List<AttendanceResponseDTO>>(repository.Search(term));
     
     public bool Update(int id, AttendanceRequestDTO source)

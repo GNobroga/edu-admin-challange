@@ -26,7 +26,6 @@
     }),
     methods: {
       redirect() {
-        console.log('oi')
         this.loading = true;
         setTimeout(() => {
           this.loading = false;
