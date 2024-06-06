@@ -1,6 +1,6 @@
 # Edu Project
 
-Projeto feito para o desafio da ZDZCode
+Um simples projeto feito para o desafio da **ZDZCode**, como por Gabriel Cardoso <3
 
 ## Modelo Lógico
 
@@ -8,6 +8,8 @@ Projeto feito para o desafio da ZDZCode
 
 
 ## Telas
+
+A maioria das telas seguem um mesmo padrão, permitindo pesquisar, criar, atualizar e remover.
 
 ### Inicial 
 
@@ -36,6 +38,16 @@ Projeto feito para o desafio da ZDZCode
 #### Ver Notas
 
 ![alt text](/docs/ver-notas-estudante.png)
+
+### Disciplinas
+
+#### Visualizar
+
+![alt text](/docs/visualizar-disciplinas.png)
+
+#### Buscar
+
+![alt text](/docs/buscar-disciplina-por-professor.png)
 
 ## Tecnologias
 
