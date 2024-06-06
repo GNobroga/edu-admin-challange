@@ -13,11 +13,11 @@ public class SubjectService(ISubjectRepository repository, IUserRepository userR
 {
     public SubjectResponseDTO Create(SubjectRequestDTO record)
     {
-        if (!userRepository.ExistsById(record.TeacherId!.Value)) 
-            throw new ApplicationException("O Usuário não existe");
-        
-        if (userRepository.FindById(record.TeacherId!.Value).Type != UserType.TEACHER)
-            throw new ApplicationException("O Usuário não é um professor");
+        if (userRepository.FindByIdAndTypeTeacher(record.TeacherId!.Value) == null) 
+            throw new ApplicationException("O Professor não existe");
+
+        if (repository.ExistsByName(record.Name!))
+            throw new ApplicationException("Já existe uma disciplina com esse nome cadastrada"); 
 
         if (!classRepository.ExistsById(record.ClassId!.Value))
             throw new ApplicationException("A Turma não existe");
@@ -46,11 +46,11 @@ public class SubjectService(ISubjectRepository repository, IUserRepository userR
     {
         var subject = ThrowIfSubjectNotFoundOrGet(id);
 
-        if (!userRepository.ExistsById(source.TeacherId!.Value)) 
-            throw new ApplicationException("O Usuário não existe");
-        
-        if (userRepository.FindById(source.TeacherId!.Value).Type != UserType.TEACHER)
-            throw new ApplicationException("O Usuário não é um professor");
+        if (userRepository.FindByIdAndTypeTeacher(source.TeacherId!.Value) == null) 
+            throw new ApplicationException("O Professor não existe");
+
+        if (repository.ExistsByName(source.Name!) && !string.Equals(source.Name, subject.Name, StringComparison.OrdinalIgnoreCase)) 
+            throw new ApplicationException("Já existe uma disciplina com esse nome cadastrada"); 
 
         if (!classRepository.ExistsById(source.ClassId!.Value))
             throw new ApplicationException("A Turma não existe");

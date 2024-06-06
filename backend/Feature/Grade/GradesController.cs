@@ -48,4 +48,16 @@ public class GradesController(IGradeService service) : ControllerBase
         return Ok(BaseResponse<IEnumerable<GradeResponseDTO>>.WithSuccess(service.FindByStudentId(id)));
     }
 
+    [HttpGet("search")]
+    public ActionResult<BaseResponse<IEnumerable<GradeResponseDTO>>> Search(string term)
+    {
+        return Ok(BaseResponse<IEnumerable<GradeResponseDTO>>.WithSuccess(service.Search(term)));
+    }
+
+    [HttpGet("student/{id:int}/average")]
+    public ActionResult<BaseResponse<IEnumerable<AverageGradesResponseDTO>>> Average(int id)
+    {
+        return Ok(BaseResponse<IEnumerable<AverageGradesResponseDTO>>.WithSuccess(service.GetAverageGradesByStudentId(id)));
+    }
+
 }

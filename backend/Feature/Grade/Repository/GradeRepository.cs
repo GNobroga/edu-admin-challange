@@ -24,6 +24,7 @@ public class GradeRepository(AppDbContext context) : IGradeRepository
          return context.Grades
             .Include(obj => obj.Student)
             .Include(obj => obj.Subject)
+            .ThenInclude(subject => subject!.Teacher)
             .OrderBy(obj => obj.Id)
             .Skip((pageRequest.Page - 1) * pageRequest.Size)
             .Take(pageRequest.Size)
@@ -35,6 +36,7 @@ public class GradeRepository(AppDbContext context) : IGradeRepository
          return context.Grades
             .Include(obj => obj.Student)
             .Include(obj => obj.Subject)
+            .ThenInclude(subject => subject!.Teacher)
             .SingleOrDefault(obj => obj.Id == id)!;
     }
     
@@ -50,6 +52,28 @@ public class GradeRepository(AppDbContext context) : IGradeRepository
         return false;
     }
 
-    public IEnumerable<GradeEntity> FindByStudentId(int id) => context.Grades.Include(grade => grade.Student).Include(grade => grade.Subject).Where(grade => grade.StudentId == id).ToList();
-    
+    public IEnumerable<GradeEntity> FindByStudentId(int id) => 
+        context.Grades
+            .Include(grade => grade.Student)
+            .Include(grade => grade.Subject)
+            .ThenInclude(subject => subject!.Teacher)
+            .Where(grade => grade.StudentId == id).ToList();
+
+    public IEnumerable<GradeEntity> Search(string term)
+    {
+        term = term.ToLower().Trim();
+
+        return context.Grades
+            .Include(obj => obj.Student)
+            .Include(obj => obj.Subject)
+            .ThenInclude(subject => subject!.Teacher)
+            .Where(obj =>
+                 obj.Student!.Name.ToLower().Contains(term) ||
+                 obj.Student!.Email.ToLower().Contains(term) ||
+                 obj.Subject!.Teacher!.Email.ToLower().Contains(term) ||
+                 obj.Subject!.Teacher!.Name.ToLower().Contains(term) ||
+                 obj.Subject!.Name.ToLower().Contains(term) ||
+                 obj.Value!.ToString().ToLower().Contains(term)
+            );  
+    }
 }

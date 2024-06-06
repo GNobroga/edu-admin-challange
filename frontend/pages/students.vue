@@ -3,7 +3,7 @@
 
 
     <!-- <nuxt-link to="/sobre">Ir para a página Sobre</nuxt-link> -->
-    <div class="w-full mx-auto mt-8 max-w-[70vw] shadow-xl bg-white border border-black border-opacity-70">
+    <div class="fadeIn w-full mx-auto mt-8 max-w-[70vw] shadow-xl bg-white border border-black border-opacity-70">
         <span class="bg-gradient-to-r from-blue-500 to-teal-400 flex justify-between p-3">
             <h2 class="p-3 rounded-md bg-brand-secondary text-white font-semibold text-xl">Gerenciar Alunos</h2>
             <section class="flex gap-3 items-center">
@@ -15,7 +15,7 @@
         <SearchInput @search="search"/>
        <div class="max-h-[50vh] overflow-hidden overflow-y-auto">
         <table class="w-full bg-white">
-            <thead class="text-sm">
+            <thead class="text-base">
                <tr class="p-2">
                     <th class="font-semibold text-center xl:text-start text-[#5E6B8C]">
                         <span class="py-2 px-3 block">ID</span>
@@ -35,11 +35,14 @@
               <tr v-for="student in data" :key="student.id" class="text-base text-center xl:text-start border border-black border-opacity-20">
                 <td class="p-3"> AL{{  student.id }}</td>
                 <td>{{  student.name }}</td>
-                <td>{{  student.email }}</td>
+                <td><span class="p-1 bg-yellow-500 rounded-md text-white">{{  student.email }}</span></td>
                 <td>
                   <div class="flex gap-3 items-center py-3">
-                    <button @click="$router.push(`/students/${student.id}/update`)" class="w-8 h-8 rounded-full hover:opacity-80 bg-orange-500 text-white"><i class="bi bi-pencil-fill"></i></button>
-                    <button @click="showConfirmDelation = true" class="w-8 h-8 rounded-full hover:opacity-80 bg-red-500 text-white"> <i class="bi bi-trash3-fill"></i></button>
+                    <button @click="$router.push(`/students/${student.id}/update`)" class="fab-mini-button bg-orange-500 text-white"><i class="bi bi-pencil-fill text-lg"></i></button>
+                    <button @click="showConfirmDelation = true" class="fab-mini-button bg-red-500 text-white"> <i class="bi bi-trash3-fill text-lg"></i></button>
+                    <button  @click="$router.push(`/students/${student.id}/averages`)" class="fab-mini-button bg-blue-800">
+                      <i class="bi bi-clipboard-data-fill text-lg text-white"></i>
+                    </button>
                   </div>
                 </td>
                 <ConfirmDeletion v-if="showConfirmDelation" @close="showConfirmDelation = false" @confirm="deleteById(student.id)"/>
@@ -52,7 +55,7 @@
             </tbody>
         </table>
        </div>
-      <Paginator @onSelection="paginatorChange"/>
+      <Paginator @onSelection="paginatorChange" :totalElements="data.length"/>
     </div>
     <NuxtChild/>
 

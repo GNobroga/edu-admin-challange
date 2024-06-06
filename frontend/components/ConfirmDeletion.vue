@@ -1,5 +1,5 @@
 <template>
-  <menu class="menu !bg-opacity-30">
+  <menu class="menu !bg-opacity-20">
     <div class="bg-white max-w-[30vw] w-full p-5 animate-slide-in rounded-md">
       <h1 class="text-lg font-medium">Aviso</h1>
       <p class="mt-3">Tem certeza que deseja prosseguir?</p>

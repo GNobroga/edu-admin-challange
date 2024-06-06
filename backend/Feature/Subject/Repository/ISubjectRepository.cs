@@ -8,4 +8,6 @@ public interface ISubjectRepository : IBaseRepository<SubjectEntity> {
     IEnumerable<SubjectEntity> Search(string term);
 
     IEnumerable<SubjectEntity> FindByTeacherId(int id);
+
+    bool ExistsByName(string name);
 }

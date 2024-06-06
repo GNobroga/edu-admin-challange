@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-full mx-auto mt-8 max-w-[70vw] shadow-xl bg-white border border-black border-opacity-70">
+    <div class="fadeIn w-full mx-auto mt-8 max-w-[70vw] shadow-xl bg-white border border-black border-opacity-70">
         <span class="bg-gradient-to-r from-blue-500 to-teal-400 flex justify-between p-3">
             <h2 class="p-3 rounded-md bg-brand-secondary text-white font-semibold text-xl">Gerenciar Disciplinas</h2>
             <section class="flex gap-3 items-center">
@@ -16,7 +16,7 @@
         <span v-if="teacher" class="ms-2 py-2 block font-medium text-sm">Pesquisando pelo professor com email: <span class="font-thin">{{ teacher?.email }}</span></span>
        <div class="max-h-[50vh] overflow-hidden overflow-y-auto">
         <table class="w-full bg-white">
-            <thead class="text-sm">
+            <thead class="text-base">
                <tr class="p-2">
                     <th class="font-semibold text-center xl:text-start text-[#5E6B8C]">
                         <span class="py-2 px-3 block">ID</span>
@@ -47,21 +47,21 @@
                 <td>{{  subject.teacher.email }}</td>
                 <td>
                   <div class="flex gap-3 items-center py-3">
-                    <button @click="$router.push(`/subjects/${subject.id}/update`)" class="w-8 h-8 rounded-full hover:opacity-80 bg-orange-500 text-white"><i class="bi bi-pencil-fill"></i></button>
-                    <button @click="showConfirmDelation = true" class="w-8 h-8 rounded-full hover:opacity-80 bg-red-500 text-white"> <i class="bi bi-trash3-fill"></i></button>
+                    <button @click="$router.push(`/subjects/${subject.id}/update`)" class="fab-mini-button bg-orange-500 text-white"><i class="bi bi-pencil-fill"></i></button>
+                    <button @click="showConfirmDelation = true" class="fab-mini-button bg-red-500 text-white"> <i class="bi bi-trash3-fill"></i></button>
                   </div>
                 </td>
                 <ConfirmDeletion v-if="showConfirmDelation" @close="showConfirmDelation = false" @confirm="deleteById(subject.id)"/>
               </tr>
               <tr v-if="!data.length">
                 <td colspan="6">
-                  <p class="text-center py-4">Não há nenhum disciplinas</p>
+                  <p class="text-center py-4">Não há nenhum disciplina</p>
                 </td>
               </tr>
             </tbody>
         </table>
        </div>
-      <Paginator @onSelection="paginatorChange"/>
+      <Paginator @onSelection="paginatorChange" :totalElements="data.length"/>
     </div>
     <NuxtChild/>
 

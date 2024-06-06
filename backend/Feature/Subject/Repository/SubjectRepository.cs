@@ -72,4 +72,10 @@ public class SubjectRepository(AppDbContext context) : ISubjectRepository
             .Include(obj => obj.Teacher)
             .Where(obj => obj.TeacherId == id).ToList();
     }
+
+    public bool ExistsByName(string term)
+    {
+       return context.Subjects
+         .SingleOrDefault(obj => obj.Name.ToLower().Equals(term.ToLower().Trim())) != null;
+    }
 }

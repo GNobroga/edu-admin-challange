@@ -9,8 +9,6 @@ public class GradeEntity : BaseEntity<int>
 {
     public double Value { get; set; } 
 
-    public DateOnly Date { get; set; }
-
     public int StudentId { get; set; }
 
     public UserEntity? Student { get; set; }

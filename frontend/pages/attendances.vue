@@ -2,8 +2,7 @@
    <div>
 
 
-<!-- <nuxt-link to="/sobre">Ir para a página Sobre</nuxt-link> -->
-<div class="w-full mx-auto mt-8 max-w-[70vw] shadow-xl bg-white border border-black border-opacity-70">
+<div class="fadeIn w-full mx-auto mt-8 max-w-[70vw] shadow-xl bg-white border border-black border-opacity-70">
     <span class="bg-gradient-to-r from-blue-500 to-teal-400 flex justify-between p-3">
         <h2 class="p-3 rounded-md bg-brand-secondary text-white font-semibold text-xl">Gerenciar Alunos</h2>
         <section class="flex gap-3 items-center">
@@ -64,7 +63,7 @@
         </tbody>
     </table>
    </div>
-  <Paginator @onSelection="paginatorChange"/>
+  <Paginator @onSelection="paginatorChange" />
 </div>
 <NuxtChild/>
 

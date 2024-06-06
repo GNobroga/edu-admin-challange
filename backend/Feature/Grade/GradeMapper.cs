@@ -14,5 +14,6 @@ public class GradeMapper : Profile
         CreateMap<GradeEntity, GradeResponseDTO>();
         CreateMap<UserEntity, GradeStudentResponseDTO>();
         CreateMap<SubjectEntity, GradeSubjectResponseDTO>();
+        CreateMap<UserEntity, GradeSubjectTeacherResponseDTO>();
     }
 }

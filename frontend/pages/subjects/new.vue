@@ -1,6 +1,6 @@
 <template>
-      <menu class="menu">
-      <form @submit.prevent="validateForm" class="bg-white px-7 py-10 max-w-[45vw] w-full shadow-lg rounded-md flex flex-col gap-3">
+      <menu class="menu !items-start">
+      <form @submit.prevent="validateForm" class="bg-white animate-slide-in px-7 py-10 max-w-[45vw] w-full shadow-lg rounded-md flex flex-col gap-3">
         <div class="flex justify-between">
           <h1 class="font-bold text-2xl mb-2">Novo</h1>
           <button type="button" @click="$router.push('/subjects')" class="fab-button bg-blue-800 relative bottom-2 text-white">
@@ -10,7 +10,10 @@
        <div  class="flex gap-3">
           <div class="flex flex-col gap-2 flex-1">
             <label class="opacity-80">Nome</label>
-            <input type="text" v-model="model.name" name="name" class="border rounded-md border-black border-opacity-30 text-lg py-4 px-4 outline-none" placeholder="Nome">
+            <select v-model="model.name" class="border rounded-md border-black border-opacity-30 text-lg py-4 px-4 outline-none">
+              <option value="" selected disabled>Selecione</option>
+              <option v-for="(subject, index) of subjects" :key="index" v-bind:value="subject">{{  subject  }}</option>
+            </select>
             <span v-if="errors.name" class="text-xs text-red-600 ms-2">{{ errors.name  }}</span>
           </div>
        </div>
@@ -42,9 +45,30 @@ import { Class } from '~/models/class';
 import { User } from '~/models/user';
 import { apiRequest } from '~/utils/api-request';
 
+const subjects = [
+    "Língua Portuguesa",
+    "Matemática",
+    "História",
+    "Geografia",
+    "Educação Física",
+    "Artes",
+    "Inglês",
+    "Física",
+    "Química",
+    "Biologia",
+    "Sociologia",
+    "Filosofia",
+    "Matemática",
+    "Física",
+    "Química",
+    "Geologia",
+    "Biologia",
+  ];
+
 
   export default {
     data: () => ({
+      subjects,
       model: {
         name: '',
         classId: null as null | number,
@@ -59,7 +83,7 @@ import { apiRequest } from '~/utils/api-request';
       teacherOptions: [] as User[],
     }),
     async created() {
-      await apiRequest(ApiConfig.baseUrlWith('users'), undefined, data => this.teacherOptions = data as any);
+      await apiRequest(ApiConfig.baseUrlWith('users'), undefined, data => this.teacherOptions = (data as User[]).filter(user => user.type === 'TEACHER'));
       apiRequest(ApiConfig.baseUrlWith('classes'), undefined, data => this.classOptions = data as any);
     },
     methods: {
@@ -85,11 +109,19 @@ import { apiRequest } from '~/utils/api-request';
         }
 
 
-        if (!this.errors.name && this.model.classId && this.model.teacherId) {
+        if (!this.hasAnyError(this.errors)) {
           await apiRequest(ApiConfig.baseUrlWith('subjects'), this.model, () => {
             (this.$parent as any)?.fetchData();
             this.$router.push('/subjects');
           }, ({ errors }) => errors.forEach(window.alert), { method: 'POST' });
+        }
+      },
+      hasAnyError(errors: object) {
+        for (const key in errors) {
+          if (errors[key]) {
+            return true;
+          }
+          return false;
         }
       }
     }

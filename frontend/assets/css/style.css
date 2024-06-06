@@ -24,6 +24,10 @@ tbody > tr:nth-child(2n + 1) {
     @apply rounded-full flex items-center justify-center w-10 h-10 hover:bg-opacity-80;
   }
 
+  .fab-mini-button {
+    @apply rounded-full flex items-center justify-center w-8 h-8 hover:bg-opacity-80;
+  }
+
   .menu {
     @apply flex items-center justify-center bg-black bg-opacity-50 p-4 fixed top-0 left-0 w-screen h-screen z-[999];
   }

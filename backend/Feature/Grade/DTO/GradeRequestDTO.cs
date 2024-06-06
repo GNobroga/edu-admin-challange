@@ -14,8 +14,5 @@ public class  GradeRequestDTO
     [Required(ErrorMessage = "A Nota é obrigatório")]
     [Range(0, 100, ErrorMessage = "A Nota deve estar entre 0 e 100")]
     public double? Value { get; set;} 
-
-    [Required(ErrorMessage = "A Data é obrigatória")]
-    public DateOnly? Date { get; set;} 
 }
 

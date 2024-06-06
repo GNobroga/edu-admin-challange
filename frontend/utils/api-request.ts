@@ -16,7 +16,11 @@ export interface FetchOptions {
 }
 
 
-export async function apiRequest<T>(url: string, data: any, resolve: (data: T) => void = () => {}, reject: (error: ResponseError) => void = () => {}, options?: FetchOptions): Promise<void> {
+export async function apiRequest<T>(url: string,
+    data: any, resolve: (data: T) => void = () => {},
+    reject: (error: ResponseError) => void = () => {},
+    options?: FetchOptions
+  ): Promise<void> {
   try {
     const response = await fetch(url, {
       ...options,

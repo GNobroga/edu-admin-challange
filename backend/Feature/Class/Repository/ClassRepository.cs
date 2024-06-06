@@ -48,6 +48,6 @@ public class ClassRepository(AppDbContext context) : IClassRepository
 
     public IEnumerable<ClassEntity> Search(string term)
     {
-        return context.Classes.Where(obj => obj.Name.Contains(term));
+        return context.Classes.Where(obj => obj.Name.Trim().ToLower().Contains(term.Trim().ToLower()));
     }
 }

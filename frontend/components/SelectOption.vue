@@ -12,8 +12,7 @@
     props: ['excludeProperties', 'options', 'item'],
     mounted() {
       setTimeout(() => {
-        (this.$refs.select as any).value = this.item.id;
-        console.log(this.item.id)
+        (this.$refs.select as any).value = this.item?.id ?? '';
       }, 300);
 
 
