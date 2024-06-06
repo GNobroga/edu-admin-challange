@@ -1,6 +1,6 @@
 # EduAdmin 
 
-Um simples projeto feito para o desafio da **ZDZCode**, feito com amor por Gabriel Cardoso <3
+Este é um projeto simples desenvolvido para o desafio ZDZCode. Ele permite realizar operações de CRUD (Criar, Ler, Atualizar e Deletar) em um contexto educacional, facilitando a gestão de dados estudantis.
 
 ## Modelo Lógico
 
