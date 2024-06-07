@@ -2,6 +2,47 @@
 
 Este é um projeto simples desenvolvido para o desafio ZDZCode. Ele permite realizar operações de CRUD (Criar, Ler, Atualizar e Deletar) em um contexto educacional, facilitando a gestão de dados estudantis.
 
+## Como usar
+
+### Frontend 
+
+Clone ou baixe os arquivos do repositório. Em seguida, siga os passos abaixo para configurar e executar o frontend:
+
+1. Navegue até a pasta do frontend:
+
+```bash
+   cd frontend
+```
+
+2. Instale as dependências:
+   
+```bash
+  npm install
+```
+
+3. Execute o projeto:
+
+```bash
+  npm run dev
+```
+
+### Backend
+
+Clone ou baixe os arquivos do repositório. Em seguida, siga os passos abaixo para configurar e executar o backend:
+
+1. Navegue até a pasta do backend:
+
+```bash
+   cd backend
+```
+
+2. Execute o projeto:
+
+```bash
+  dotnet run 
+```
+
+Certifique-se de ter o SDK do .NET na versão 8.0 instalado em seu sistema.
 
 ## Modelo Lógico
 
