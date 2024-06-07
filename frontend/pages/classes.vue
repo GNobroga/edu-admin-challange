@@ -32,10 +32,9 @@
                 <td>
                   <div class="flex justify-end gap-3 items-center py-3 pr-5">
                     <button @click="$router.push(`/classes/${clazz.id}/update`)" class="fab-mini-button bg-orange-500 text-white"><i class="bi bi-pencil-fill"></i></button>
-                    <button @click="showConfirmDelation = true" class="fab-mini-button bg-red-500 text-white"> <i class="bi bi-trash3-fill"></i></button>
+                    <button @click="deleteById(clazz.id)" class="fab-mini-button bg-red-500 text-white"> <i class="bi bi-trash3-fill"></i></button>
                   </div>
                 </td>
-                <ConfirmDeletion v-if="showConfirmDelation" @close="showConfirmDelation = false" @confirm="deleteById(clazz.id)"/>
               </tr>
               <tr v-if="!data.length">
                 <td colspan="3">
@@ -85,10 +84,12 @@
         this.data = (await req.json()).data;
       },
       async deleteById(id: number) {
+        if (!window.confirm('Realmente deseja deletar?')) return;
         await apiRequest(ApiConfig.baseUrlWith('classes/'+id), null, undefined, undefined, {
           method: 'delete',
         });
         await this.fetchData();
+
       },
       async search(data: { value: string }) {
         this.reset();

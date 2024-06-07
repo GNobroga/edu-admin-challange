@@ -56,10 +56,9 @@
                 <td>
                   <div class="flex gap-3 items-center py-3">
                     <button @click="$router.push(`/grades/${grade.id}/update`)" class="fab-mini-button bg-orange-500 text-white"><i class="bi bi-pencil-fill"></i></button>
-                    <button @click="showConfirmDelation = true" class="fab-mini-button bg-red-500 text-white"> <i class="bi bi-trash3-fill"></i></button>
+                    <button @click="deleteById(grade.id)" class="fab-mini-button bg-red-500 text-white"> <i class="bi bi-trash3-fill"></i></button>
                   </div>
                 </td>
-                <ConfirmDeletion v-if="showConfirmDelation" @close="showConfirmDelation = false" @confirm="deleteById(grade.id)"/>
               </tr>
               <tr v-if="!data.length">
                 <td colspan="9">
@@ -109,6 +108,7 @@
         this.data = (await req.json()).data;
       },
       async deleteById(id: number) {
+        if (!window.confirm('Realmente deseja deletar?')) return;
         await apiRequest(ApiConfig.baseUrlWith('grades/'+id), null, undefined, undefined, {
           method: 'delete',
         });
