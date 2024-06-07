@@ -1,6 +1,6 @@
 <template>
   <div class="menu">
-    <div class="bg-white p-5 max-w-[40vw] w-full rounded-md shadow-md py-8 animate-slide-in">
+    <div class="bg-white  animate-slide-in p-5 max-w-[40vw] w-full rounded-md shadow-md py-8 animate-slide-in">
       <div class="flex justify-between gap-2 items-center">
         <h1 class="font-semibold text-2xl text-blue-900">
           <i class="bi bi-bar-chart-line-fill"></i>

@@ -1,6 +1,6 @@
 <template>
   <menu class="menu">
-  <form @submit.prevent="validateForm" class="bg-white px-7 py-10 max-w-[40vw] w-full shadow-lg rounded-md flex flex-col gap-3">
+  <form @submit.prevent="validateForm" class="bg-white  animate-slide-in px-7 py-10 max-w-[40vw] w-full shadow-lg rounded-md flex flex-col gap-3">
     <div class="flex justify-between">
       <h1 class="font-bold text-2xl mb-2">Atualizar</h1>
       <button type="button" @click="$router.push('/students')" class="fab-button bg-blue-800 relative bottom-2 text-white">
